@@ -29,28 +29,27 @@ int main(int argc, char ** argv)
 		default:
 			abort();
 		}
-		
-		/*Init (M,b); // initialize
+	}
+	Init (M,b); // initialize
 	
-		// test operations
-		int testnums [] = {100, 5, 200, 7, 39, 25, 400, 50, 200, 300};
-		int i = 0;
-		for (i=0; i< 10; i ++)
-		{
-			Insert (testnums [i]);
-		}
-		PrintList ();
-		Delete (7);
-		Insert (13);
-		Delete (55);
-		Delete (3);
-		PrintList ();
-		 end test operations
-		Destroy ();*/
-		
-		for (index = optind; index < argc; ++index) {
-			printf("Non-option argument %s\n", argv[index]);
-		}
+	// test operations
+	int testnums [] = {100, 5, 200, 7, 39, 25, 400, 50, 200, 300};
+	int i = 0;
+	for (i=0; i< 10; i ++)
+	{
+		Insert (testnums [i]);
+	}
+	PrintList ();
+	Delete (7);
+	Insert (13);
+	Delete (55);
+	Delete (3);
+	PrintList ();
+	//end test operations
+	Destroy ();
+	
+	for (index = optind; index < argc; ++index) {
+		printf("Non-option argument %s\n", argv[index]);
 	}
 	return 0;
 }

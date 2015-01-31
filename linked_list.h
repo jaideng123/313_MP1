@@ -1,6 +1,10 @@
 #ifndef _linked_list_h_                   // include file only once
 #define _linked_list_h_
 #include <stdint.h>
+int max_blocks;
+int block_size;
+struct list_node *head;
+struct list_node *free_ptr;
 struct list_node{
 	struct list_node *next;
 	uint32_t key;
