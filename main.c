@@ -35,13 +35,14 @@ int main(int argc, char ** argv)
 	// test operations
 	int testnums [] = {100, 5, 200, 7, 39, 25, 400, 50, 200, 300};
 	int i = 0;
+	char test[] = "Hello";
 	for (i=0; i< 10; i ++)
 	{
-		Insert (testnums [i]);
+		Insert (testnums[i],test,6);
 	}
 	PrintList ();
 	Delete (7);
-	Insert (13);
+	//Insert (13);
 	Delete (55);
 	Delete (3);
 	PrintList ();
