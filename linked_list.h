@@ -1,9 +1,11 @@
 #ifndef _linked_list_h_                   // include file only once
 #define _linked_list_h_
 #include <stdint.h>
+#define NULL 0
 
 int max_blocks;
 int block_size;
+void* mem_ptr;
 
 struct list_node *head;
 struct list_node *free_ptr;

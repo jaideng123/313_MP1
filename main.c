@@ -48,6 +48,7 @@ int main(int argc, char ** argv)
 	PrintList ();
 	//end test operations
 	Destroy ();
+	PrintList ();
 	
 	for (index = optind; index < argc; ++index) {
 		printf("Non-option argument %s\n", argv[index]);
