@@ -44,6 +44,8 @@ int main(int argc, char ** argv)
 	Delete (7);
 	int test2 = 55;
 	Insert (13,&test2,sizeof(test2));
+	char *test3= Lookup(5);
+	printf("%s\n",test3);
 	Delete (55);
 	Delete (3);
 	PrintList ();

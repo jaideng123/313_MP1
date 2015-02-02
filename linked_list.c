@@ -59,7 +59,16 @@ int Delete (int key){
 		return 0;
 }
 //return pointer to matching key value
-char* Lookup (int key){}
+char* Lookup (int key){
+	struct list_node * current = head;
+	while(current != NULL && current->key != key)
+		current = current->next;
+	if(current != NULL){
+		return current->value;
+	}
+	else
+		return NULL;
+}
 //prints list in order
 void PrintList (){
 	struct list_node * current = head;
