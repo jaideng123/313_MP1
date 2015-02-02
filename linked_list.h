@@ -5,6 +5,7 @@
 
 int max_blocks;
 int block_size;
+int current_size;
 void* mem_ptr;
 
 struct list_node *head;

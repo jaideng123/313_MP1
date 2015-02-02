@@ -42,7 +42,8 @@ int main(int argc, char ** argv)
 	}
 	PrintList ();
 	Delete (7);
-	//Insert (13);
+	int test2 = 55;
+	Insert (13,&test2,sizeof(test2));
 	Delete (55);
 	Delete (3);
 	PrintList ();
