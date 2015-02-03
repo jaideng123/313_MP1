@@ -26,8 +26,14 @@ void Destroy (){
 } 		
 //insert new node at end
 int Insert (int key,char * value_ptr, int value_len){
-	if(num_blocks == max_blocks)
+	if(num_blocks == max_blocks){
+		printf("Error: linked list is full");
 		return EXIT_FAILURE;
+	}
+	if(value_len > block_size-(8 + sizeof(head))){
+		printf("Error: value is too long");
+		return EXIT_FAILURE;
+	}
 	if(head == NULL){
 		head = free_ptr;
 		free_ptr += block_size;
@@ -67,8 +73,10 @@ int Delete (int key){
 			head = current->next;
 		return EXIT_SUCCESS;
 	}
-	else
+	else{
+		printf("Error: Key not found");
 		return EXIT_FAILURE;
+	}
 }
 //return pointer to matching key value
 char* Lookup (int key){
@@ -78,8 +86,10 @@ char* Lookup (int key){
 	if(current != NULL){
 		return current->value;
 	}
-	else
+	else{
+		printf("Error: Key not found");
 		return NULL;
+	}
 }
 //prints list in order
 void PrintList (){

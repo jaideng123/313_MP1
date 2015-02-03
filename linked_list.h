@@ -13,6 +13,7 @@ void* mem_ptr;
 
 struct list_node *head;
 struct list_node *free_ptr;
+
 struct list_node{
 	struct list_node *next;
 	uint32_t key;
