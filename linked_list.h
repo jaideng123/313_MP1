@@ -2,10 +2,13 @@
 #define _linked_list_h_
 #include <stdint.h>
 #define NULL 0
+#define EXIT_SUCCESS 0
+#define EXIT_FAILURE 1
 
 int max_blocks;
 int block_size;
 int current_size;
+int num_blocks;
 void* mem_ptr;
 
 struct list_node *head;

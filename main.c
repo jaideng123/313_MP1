@@ -8,15 +8,15 @@ int main(int argc, char ** argv)
 {
 	int c;
 	int index;
-	int M = 1024;
+	int M = 512;
 	int b = 128;
 	while ((c = getopt (argc, argv, "b:s:")) != -1) {
 		switch(c) {
 		case 'b':
-			M = atoi(optarg);
+			b = atoi(optarg);
 			break;
 		case 's':
-			b = atoi(optarg);
+			M = atoi(optarg);
 			break;
 		case '?':
 			if (optopt == 'c')

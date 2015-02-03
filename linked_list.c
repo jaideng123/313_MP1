@@ -1,22 +1,33 @@
 #include "linked_list.h"
 #include <stdio.h>
 void Init (int M, int b){
-	//TODO error checking(i.e. b < 12)
-	block_size = b;
-	max_blocks = M/b;
-	mem_ptr = malloc(M);
-	free_ptr = (struct list_node *) mem_ptr;
-	head = NULL;
+	if(b > (8 + sizeof(head)) && !(M < b)){
+		block_size = b;
+		max_blocks = M/b;
+		num_blocks = 0;
+		mem_ptr = malloc(M);
+		free_ptr = (struct list_node *) mem_ptr;
+		head = NULL;
+	}
+	else{
+		printf("Error: sizes are not valid");
+	}
 } 
 //reset pointers, free mem
 void Destroy (){
-	free(mem_ptr);
-	head = NULL;
-	free_ptr = NULL;
+	if(mem_ptr != NULL){
+		free(mem_ptr);
+		head = NULL;
+		free_ptr = NULL;
+		mem_ptr = NULL;
+	}
+	else
+		printf("Error: nothing to Destroy");
 } 		
-//insert new node at end 
+//insert new node at end
 int Insert (int key,char * value_ptr, int value_len){
-	//TODO error checking(mem is full)
+	if(num_blocks == max_blocks)
+		return EXIT_FAILURE;
 	if(head == NULL){
 		head = free_ptr;
 		free_ptr += block_size;
@@ -38,9 +49,10 @@ int Insert (int key,char * value_ptr, int value_len){
 		memcpy((void *)free_ptr->value,(void *)value_ptr,value_len);
 		free_ptr += block_size;
 	}
+	num_blocks++;
+	return EXIT_SUCCESS;
 }
 //deletes node with certain key
-//return 1 if successful, 0 otherwise
 int Delete (int key){
 	struct list_node * current = head;
 	struct list_node * prev = NULL;
@@ -53,10 +65,10 @@ int Delete (int key){
 			prev->next = current->next;
 		else
 			head = current->next;
-		return 1;
+		return EXIT_SUCCESS;
 	}
 	else
-		return 0;
+		return EXIT_FAILURE;
 }
 //return pointer to matching key value
 char* Lookup (int key){
