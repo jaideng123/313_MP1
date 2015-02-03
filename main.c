@@ -10,13 +10,13 @@ int main(int argc, char ** argv)
 	int index;
 	int M = 1024;
 	int b = 128;
-	while ((c = getopt (argc, argv, "bs:")) != -1) {
+	while ((c = getopt (argc, argv, "b:s:")) != -1) {
 		switch(c) {
 		case 'b':
-			M = optarg;
+			M = atoi(optarg);
 			break;
 		case 's':
-			b = optarg;
+			b = atoi(optarg);
 			break;
 		case '?':
 			if (optopt == 'c')
@@ -30,6 +30,8 @@ int main(int argc, char ** argv)
 			abort();
 		}
 	}
+	printf("M: %u \n", M);
+	printf("b: %u \n", b);
 	Init (M,b); // initialize
 	
 	// test operations
