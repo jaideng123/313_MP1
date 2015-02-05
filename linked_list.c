@@ -10,7 +10,7 @@ void Init (int M, int b){
 		head = NULL;
 	}
 	else{
-		printf("Error: sizes are not valid");
+		printf("\nError: sizes are not valid\n");
 	}
 } 
 //reset pointers, free mem
@@ -22,16 +22,16 @@ void Destroy (){
 		mem_ptr = NULL;
 	}
 	else
-		printf("Error: nothing to Destroy");
+		printf("\nError: nothing to Destroy\n");
 } 		
 //insert new node at end
 int Insert (int key,char * value_ptr, int value_len){
 	if(num_blocks == max_blocks){
-		printf("Error: linked list is full");
+		printf("\nError: linked list is full\n");
 		return EXIT_FAILURE;
 	}
 	if(value_len > block_size-(8 + sizeof(head))){
-		printf("Error: value is too long");
+		printf("\nError: value is too long\n");
 		return EXIT_FAILURE;
 	}
 	if(head == NULL){
@@ -74,7 +74,7 @@ int Delete (int key){
 		return EXIT_SUCCESS;
 	}
 	else{
-		printf("Error: Key not found");
+		printf("\nError: Key not found\n");
 		return EXIT_FAILURE;
 	}
 }
@@ -87,7 +87,7 @@ char* Lookup (int key){
 		return current->value;
 	}
 	else{
-		printf("Error: Key not found");
+		printf("\nError: Key not found\n");
 		return NULL;
 	}
 }
@@ -104,4 +104,3 @@ void PrintList (){
 	printf("\n\n");
 
 }
-

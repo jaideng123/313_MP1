@@ -37,17 +37,17 @@ int main(int argc, char ** argv)
 	// test operations
 	int testnums [] = {100, 5, 200, 7, 39, 25, 400, 50, 200, 300};
 	int i = 0;
-	char test[] = "Hello";
+	char test[] = "Hello this is thirty one bytes ";
 	for (i=0; i< 10; i ++)
 	{
-		Insert (testnums[i],test,6);
+		Insert (testnums[i],test,32);
 	}
 	PrintList ();
 	Delete (7);
 	int test2 = 55;
 	Insert (13,&test2,sizeof(test2));
-	char *test3= Lookup(5);
-	printf("%s\n",test3);
+	//char *test3= Lookup(5);
+	//printf("%s\n",test3);
 	Delete (55);
 	Delete (3);
 	PrintList ();
