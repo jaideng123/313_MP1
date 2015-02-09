@@ -1,14 +1,18 @@
 #include "linked_list2.h"
 #include <stdio.h>
 void Init (int M, int b, int t){
-	if(b > (8 + sizeof(head)) && !(M < b)){
+	if(b > (8 + sizeof(struct list_node *)) && !(M/t < b)){
 		block_size = b;
-		max_blocks = M/b;
-		num_blocks = 0;
+		max_blocks = (M/b)/t;
+		num_blocks = malloc(t*sizeof(int));
+		num_lists = t;
 		mem_ptr = malloc(M);
-		free_ptr = (struct list_node *) mem_ptr;
-		struct list_node *nodes[t];
-		list = &nodes;
+		head_list = malloc(t*sizeof(struct list_node *));
+		for(int i = 0; i < t;++i)
+			head_list[i] = NULL;
+		free_list = malloc(t*sizeof(struct list_node *));
+		for(int i = 0; i < t;++i)
+			free_list[t] = ((struct list_node *)mem_ptr)+b*i;
 	}
 	else{
 		printf("\nError: sizes are not valid\n");
@@ -18,9 +22,14 @@ void Init (int M, int b, int t){
 void Destroy (){
 	if(mem_ptr != NULL){
 		free(mem_ptr);
-		head = NULL;
-		free_ptr = NULL;
+		for(int i = 0; i < num_lists;++i){
+			head_list[i] = NULL;
+			free_list[i] = NULL;
+		}
 		mem_ptr = NULL;
+		free(head_list);
+		free(free_list);
+		free(num_blocks);
 	}
 	else
 		printf("\nError: nothing to Destroy\n");

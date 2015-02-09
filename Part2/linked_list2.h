@@ -7,13 +7,12 @@
 
 int max_blocks;
 int block_size;
-int current_size;
-int num_blocks;
+int num_lists;
 void* mem_ptr;
 
-struct list_node *head;
-struct list_node *free_ptr;
-struct list_node **list;
+struct list_node **head_list;
+struct list_node **free_list;
+int *num_blocks;
 
 struct list_node{
 	struct list_node *next;
