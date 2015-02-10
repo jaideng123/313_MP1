@@ -1,6 +1,9 @@
 #include <stdlib.h>
 #include <string.h>
-
+#include <ctype.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <getopt.h>
 int main(int argc, char ** argv) 
 {
 	int b = 128;

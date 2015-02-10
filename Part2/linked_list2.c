@@ -3,18 +3,29 @@
 #define INT_MAX 2147483647
 void Init (int M, int b, int t){
 	if(b > (8 + sizeof(struct list_node *)) && !(M/t < b)){
+		if(initialized == 1){
+			printf("\nError: Linked list previously initialized");
+			return;
+		}
+		initialized = 1;
 		block_size = b;
-		max_blocks = (M/b)/t;
+		max_blocks = (M/t)/b;
+		//array holding # of blocks
 		num_blocks = malloc(t*sizeof(int));
+		int i;
+		for(i = 0;i < t;++i){
+			num_blocks[i] = 0;
+		}
+
 		num_lists = t;
 		mem_ptr = malloc(M);
-		
+		//array of head nodes
 		head_list = malloc(t*sizeof(struct list_node *));
-		for(int i = 0; i < t;++i)
+		for(i = 0;i < t;++i)
 			head_list[i] = NULL;
-
+		//array of free pointers
 		free_list = malloc(t*sizeof(struct list_node *));
-		for(int i = 0; i < t;++i)
+		for(i = 0; i < t;++i)
 			free_list[i] = ((struct list_node *)mem_ptr)+(max_blocks*block_size*i);
 	}
 	else{
@@ -23,31 +34,39 @@ void Init (int M, int b, int t){
 } 
 //reset pointers, free mem
 void Destroy (){
-	if(mem_ptr != NULL){
-		free(mem_ptr);
-		for(int i = 0; i < num_lists;++i){
+	if(initialized != 0){
+		int i;
+		for(i = 0; i < num_lists;++i){
 			head_list[i] = NULL;
 			free_list[i] = NULL;
 		}
+		free(mem_ptr);
 		mem_ptr = NULL;
 		free(head_list);
 		free(free_list);
 		free(num_blocks);
+		initialized = 0;
 	}
 	else
 		printf("\nError: nothing to Destroy\n");
 } 		
 //insert new node at end
 int Insert (int key,char * value_ptr, int value_len){
-	int index = key/(INT_MAX/num_lists);
-	if(num_blocks[index] == max_blocks){
-		printf("\nError: linked list is full\n");
+	if(key < 0 || key > INT_MAX){
+		printf("\nError: Invalid Key \n");
 		return EXIT_FAILURE;
 	}
 	if(value_len > block_size-(8 + sizeof(struct list_node *))){
 		printf("\nError: value is too long\n");
 		return EXIT_FAILURE;
 	}
+
+	int index = key/(INT_MAX/num_lists);
+	if(num_blocks[index] == max_blocks){
+		printf("\nError: linked list is full\n");
+		return EXIT_FAILURE;
+	}
+
 	if(head_list[index] == NULL){
 		head_list[index] = free_list[index];
 		free_list[index] += block_size;
@@ -69,11 +88,16 @@ int Insert (int key,char * value_ptr, int value_len){
 		memcpy((void *)free_list[index]->value,(void *)value_ptr,value_len);
 		free_list[index] += block_size;
 	}
+
 	num_blocks[index]++;
 	return EXIT_SUCCESS;
 }
 //deletes node with certain key
 int Delete (int key){
+	if(key < 0 || key > INT_MAX){
+		printf("\nError: Key not found\n");
+		return EXIT_FAILURE;
+	}
 	int index = key/(INT_MAX/num_lists);
 	struct list_node * current = head_list[index];
 	struct list_node * prev = NULL;
@@ -95,6 +119,10 @@ int Delete (int key){
 }
 //return pointer to matching key value
 char* Lookup (int key){
+	if(key < 0 || key > INT_MAX){
+		printf("\nError: Key not found\n");
+		return NULL;
+	}
 	int index = key/(INT_MAX/num_lists);
 	struct list_node * current = head_list[index];
 	while(current != NULL && current->key != key)
@@ -109,7 +137,8 @@ char* Lookup (int key){
 }
 //prints list in order
 void PrintList (){
-	for(int i = 0; i < num_lists; ++i){
+	int i;
+	for(i = 0; i < num_lists; ++i){
 		printf("List %i:\n",i);
 		struct list_node * current = head_list[i];
 		while(current != NULL){

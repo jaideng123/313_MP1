@@ -8,6 +8,7 @@
 int max_blocks;
 int block_size;
 int num_lists;
+int initialized;
 void* mem_ptr;
 
 struct list_node **head_list;
