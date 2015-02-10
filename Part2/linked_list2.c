@@ -1,5 +1,6 @@
 #include "linked_list2.h"
 #include <stdio.h>
+#define INT_MAX 2147483647
 void Init (int M, int b, int t){
 	if(b > (8 + sizeof(struct list_node *)) && !(M/t < b)){
 		block_size = b;
@@ -7,12 +8,14 @@ void Init (int M, int b, int t){
 		num_blocks = malloc(t*sizeof(int));
 		num_lists = t;
 		mem_ptr = malloc(M);
+		
 		head_list = malloc(t*sizeof(struct list_node *));
 		for(int i = 0; i < t;++i)
 			head_list[i] = NULL;
+
 		free_list = malloc(t*sizeof(struct list_node *));
 		for(int i = 0; i < t;++i)
-			free_list[t] = ((struct list_node *)mem_ptr)+b*i;
+			free_list[i] = ((struct list_node *)mem_ptr)+(max_blocks*block_size*i);
 	}
 	else{
 		printf("\nError: sizes are not valid\n");
@@ -36,41 +39,43 @@ void Destroy (){
 } 		
 //insert new node at end
 int Insert (int key,char * value_ptr, int value_len){
-	if(num_blocks == max_blocks){
+	int index = key/(INT_MAX/num_lists);
+	if(num_blocks[index] == max_blocks){
 		printf("\nError: linked list is full\n");
 		return EXIT_FAILURE;
 	}
-	if(value_len > block_size-(8 + sizeof(head))){
+	if(value_len > block_size-(8 + sizeof(struct list_node *))){
 		printf("\nError: value is too long\n");
 		return EXIT_FAILURE;
 	}
-	if(head == NULL){
-		head = free_ptr;
-		free_ptr += block_size;
-		head->next = NULL;
-		head->key = key;
-		head->val_length = value_len;
+	if(head_list[index] == NULL){
+		head_list[index] = free_list[index];
+		free_list[index] += block_size;
+		head_list[index]->next = NULL;
+		head_list[index]->key = key;
+		head_list[index]->val_length = value_len;
 		//8 = sizeof key + val_length
-		head->value = head + 8 + sizeof(head);
-		memcpy((void *)head->value,(void *)value_ptr,value_len);
+		head_list[index]->value = head_list[index] + 8 + sizeof(struct list_node *);
+		memcpy((void *)head_list[index]->value,(void *)value_ptr,value_len);
 	}
 	else{
-		struct list_node *prev = free_ptr - block_size;
-		free_ptr->next = NULL;
-		prev->next = free_ptr;
-		free_ptr->key = key;
-		free_ptr->val_length = value_len;
+		struct list_node *prev = free_list[index] - block_size;
+		free_list[index]->next = NULL;
+		prev->next = free_list[index];
+		free_list[index]->key = key;
+		free_list[index]->val_length = value_len;
 		//8 = sizeof key + val_length
-		free_ptr->value = free_ptr + 8 + sizeof(head);
-		memcpy((void *)free_ptr->value,(void *)value_ptr,value_len);
-		free_ptr += block_size;
+		free_list[index]->value = free_list[index] + 8 + sizeof(struct list_node *);
+		memcpy((void *)free_list[index]->value,(void *)value_ptr,value_len);
+		free_list[index] += block_size;
 	}
-	num_blocks++;
+	num_blocks[index]++;
 	return EXIT_SUCCESS;
 }
 //deletes node with certain key
 int Delete (int key){
-	struct list_node * current = head;
+	int index = key/(INT_MAX/num_lists);
+	struct list_node * current = head_list[index];
 	struct list_node * prev = NULL;
 	while(current != NULL && current->key != key){
 		prev = current;
@@ -80,7 +85,7 @@ int Delete (int key){
 		if(prev != NULL)
 			prev->next = current->next;
 		else
-			head = current->next;
+			head_list[index] = current->next;
 		return EXIT_SUCCESS;
 	}
 	else{
@@ -90,7 +95,8 @@ int Delete (int key){
 }
 //return pointer to matching key value
 char* Lookup (int key){
-	struct list_node * current = head;
+	int index = key/(INT_MAX/num_lists);
+	struct list_node * current = head_list[index];
 	while(current != NULL && current->key != key)
 		current = current->next;
 	if(current != NULL){
@@ -103,14 +109,17 @@ char* Lookup (int key){
 }
 //prints list in order
 void PrintList (){
-	struct list_node * current = head;
-	while(current != NULL){
-		if(current->val_length == sizeof(int))
-			printf("Key: %i Value: %u \n",current->key,*(int*)current->value);
-		else
-			printf("Key: %i Value: %s \n",current->key,current->value);
-		current = current->next;
+	for(int i = 0; i < num_lists; ++i){
+		printf("List %i:\n",i);
+		struct list_node * current = head_list[i];
+		while(current != NULL){
+			if(current->val_length == sizeof(int))
+				printf("Key: %i Value: %u \n",current->key,*(int*)current->value);
+			else
+				printf("Key: %i Value: %s \n",current->key,current->value);
+			current = current->next;
+		}
+		printf("\n\n");
 	}
-	printf("\n\n");
 
 }
